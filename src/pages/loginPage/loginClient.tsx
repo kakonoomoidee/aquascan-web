@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "@src/hooks/useLogin";
 import { useAuth } from "@src/hooks/useAuth";
@@ -10,6 +10,9 @@ const LoginClient = () => {
   const { isAdmin } = useAuth();
   const { login, loading, error } = useLogin();
   const navigate = useNavigate();
+  useEffect(() => {
+    document.title = "Login - AquaScan Admin";
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +24,7 @@ const LoginClient = () => {
         navigate("/dashboard");
       } else {
         alert("Anda bukan admin, akses ditolak");
+        console.log(isAdmin);
       }
     }, 300);
   };
@@ -81,14 +85,16 @@ const LoginClient = () => {
     <div className="min-h-screen bg-gray-50 font-sans flex items-center justify-center p-4">
       <div className="flex w-full max-w-6xl min-h-[700px] bg-white shadow-2xl rounded-2xl overflow-hidden">
         {/* Kolom Kiri: Visual Bali */}
-        <div
-          className="hidden md:block w-1/2 bg-cover bg-center bg-no-repeat relative"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1938&auto=format&fit=crop')",
-          }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-12 text-white">
+        <div className="hidden md:block w-1/2 relative">
+          {/* Image Layer */}
+          <img
+            src={loginImage}
+            alt="Bali Water System"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+
+          {/* Overlay + Text */}
+          <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-10 text-white">
             <h1 className="text-4xl font-bold leading-tight mb-4">
               Tirta Amerta Bhuwana
             </h1>
@@ -138,7 +144,7 @@ const LoginClient = () => {
                   <input
                     id="email"
                     type="email"
-                    placeholder="admin@pdam.com"
+                    placeholder="user@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required

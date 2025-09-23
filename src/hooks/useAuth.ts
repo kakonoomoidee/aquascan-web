@@ -70,5 +70,11 @@ export const useAuth = () => {
     setUser(null);
   };
 
-  return { user, isAdmin: user?.isAdmin, loading, logout, setUser };
+  return {
+    user,
+    isAdmin: user?.isAdmin,
+    loading,
+    logout,
+    setUser,
+  };
 };

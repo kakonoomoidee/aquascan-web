@@ -1,0 +1,228 @@
+import { useState, type ReactNode } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+// --- Icon Components for Menus (No Change) ---
+const IconDashboard = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+  </svg>
+);
+const IconUsers = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+    <circle cx="9" cy="7" r="4"></circle>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+  </svg>
+);
+const IconTasks = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+  </svg>
+);
+const IconValidation = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+    <path d="m9 12 2 2 4-4"></path>
+  </svg>
+);
+
+// --- NEW, AUTHENTIC Candi Bentar (Balinese Gate) Ornament ---
+const candiBentarOrnament = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="#a5f3fc">
+    <path d="M9.79 22.42 1.5 18.25V3.75l8.29 4.17v14.5ZM22.5 18.25 14.21 22.42V8l8.29-4.25v14.5Z"/>
+  </svg>
+`;
+
+const encodedSvg = `url("data:image/svg+xml,${encodeURIComponent(
+  candiBentarOrnament
+)}")`;
+
+// Define the type for a menu item
+interface Menu {
+  label: string;
+  path: string;
+  icon: ReactNode;
+  subMenus?: SubMenu[];
+}
+
+interface SubMenu {
+  label: string;
+  path: string;
+}
+
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+
+  const menus: Menu[] = [
+    { label: "Dashboard", path: "/dashboard", icon: <IconDashboard /> },
+    {
+      label: "Manajemen User",
+      path: "/users",
+      icon: <IconUsers />,
+      subMenus: [
+        { label: "Daftar User", path: "/users/list" },
+        { label: "Tambah User", path: "/users/add" },
+      ],
+    },
+    { label: "Manajemen Tugas", path: "/tasks", icon: <IconTasks /> },
+    { label: "Validasi Input", path: "/validation", icon: <IconValidation /> },
+  ];
+
+  const handleMenuClick = (menuLabel: string) => {
+    setOpenMenu(openMenu === menuLabel ? null : menuLabel);
+  };
+
+  return (
+    <div
+      className="h-screen w-64 bg-sky-100 text-slate-700 flex flex-col"
+      style={{
+        backgroundImage: encodedSvg,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "bottom 1rem right 1rem",
+        backgroundSize: "110px", // Adjusted size for the new ornament
+      }}
+    >
+      <div className="flex flex-col h-full">
+        <div className="p-6 text-2xl font-bold border-b border-sky-200 flex items-center space-x-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="text-sky-500"
+          >
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0L12 2.69zm0 15.31a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+          </svg>
+          <span>AquaScan Admin</span>
+        </div>
+
+        <nav className="flex-1 p-4 space-y-1">
+          {menus.map((menu, idx) => {
+            const isParentActive =
+              menu.path && location.pathname.startsWith(menu.path);
+
+            return (
+              <div key={idx}>
+                <button
+                  onClick={() =>
+                    menu.subMenus
+                      ? handleMenuClick(menu.label)
+                      : navigate(menu.path)
+                  }
+                  className={`w-full flex justify-between items-center text-left px-4 py-2 rounded-lg transition text-sm ${
+                    isParentActive
+                      ? "bg-sky-200/80 font-semibold text-sky-800"
+                      : "hover:bg-sky-200/70"
+                  }`}
+                >
+                  <span className="flex items-center">
+                    <span className="w-5 h-5 mr-3">{menu.icon}</span>
+                    {menu.label}
+                  </span>
+                  {menu.subMenus && (
+                    <svg
+                      className={`w-4 h-4 transition-transform ${
+                        openMenu === menu.label ? "rotate-90" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5l7 7-7 7"
+                      ></path>
+                    </svg>
+                  )}
+                </button>
+
+                {menu.subMenus && openMenu === menu.label && (
+                  <div className="mt-1 pl-8 space-y-1">
+                    {menu.subMenus.map((subMenu, subIdx) => {
+                      const isSubActive = location.pathname === subMenu.path;
+                      return (
+                        <button
+                          key={subIdx}
+                          onClick={() => navigate(subMenu.path)}
+                          className={`w-full text-left px-4 py-2 rounded-lg text-sm transition ${
+                            isSubActive
+                              ? "bg-sky-300/70 font-semibold text-sky-900"
+                              : "hover:bg-sky-200/70"
+                          }`}
+                        >
+                          {subMenu.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-sky-200 mt-auto">
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/login");
+            }}
+            className="w-full bg-rose-400 hover:bg-rose-500 text-white px-4 py-2 rounded-lg transition"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
