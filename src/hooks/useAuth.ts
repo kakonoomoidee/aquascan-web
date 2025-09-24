@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { getUserFromToken } from "@src/utils/jwt_decode";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 interface User {
   id: number;
   email?: string;
@@ -39,7 +41,7 @@ export const useAuth = () => {
 
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/profile`,
+          `${API_BASE}/profile`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

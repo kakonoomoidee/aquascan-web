@@ -9,10 +9,9 @@ import LoginClient from "@src/pages/loginPage/loginClient";
 import DashboardClient from "@src/pages/dashboardPage/dashboardClient";
 import AddUserClient from "@src/pages/users/addUser/addUserClient";
 import ListUserClient from "@src/pages/users/listUser/listUserClient";
-
-// Dummy pages untuk nanti diisi
-const TasksPage = () => <h1>Manajemen Tugas</h1>;
-const ValidationPage = () => <h1>Validasi Input</h1>;
+import TaskClient from "@src/pages/taskPage/taskClient";
+import ValidateClient from "@src/pages/validatePage/validateClient";
+import CustomerClient from "@src/pages/customerPage/customerClient";
 
 export default function AppRoutes() {
   return (
@@ -24,18 +23,21 @@ export default function AppRoutes() {
         {/* Login */}
         <Route path="/login" element={<LoginClient />} />
 
-        {/* Dashboard Layout */}
+        {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardClient />} />
 
-        {/* Add User */}
+        {/* User */}
         <Route path="/users/add" element={<AddUserClient />} />
         <Route path="/users/list" element={<ListUserClient />} />
 
+        {/* Client */}
+        <Route path="/clients" element={<CustomerClient />} />
+
         {/* Tasks */}
-        <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/tasks" element={<TaskClient />} />
 
         {/* Validation */}
-        <Route path="/validation" element={<ValidationPage />} />
+        <Route path="/validation" element={<ValidateClient />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,8 @@
 // src/hooks/useUser.ts
 import { useState } from "react";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 export interface UserPayload {
   full_name: string;
   email: string;
@@ -28,7 +30,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/admin/regisuser`,
+        `${API_BASE}/admin/regisuser`,
         {
           method: "POST",
           headers: {
@@ -54,7 +56,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/admin/users`,
+        `${API_BASE}/admin/users/`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -76,7 +78,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/admin/users/${id}`,
+        `${API_BASE}/admin/users/${id}`,
         {
           method: "PUT",
           headers: {
@@ -102,7 +104,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/admin/users/${id}`,
+        `${API_BASE}/admin/users/${id}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },

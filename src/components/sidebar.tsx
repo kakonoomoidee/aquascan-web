@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-// --- Icon Components for Menus (No Change) ---
+// --- Icon Components ---
 const IconDashboard = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -19,6 +19,24 @@ const IconDashboard = () => (
   </svg>
 );
 const IconUsers = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+    <circle cx="9" cy="7" r="4"></circle>
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+  </svg>
+);
+const IconClients = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -69,7 +87,6 @@ const IconValidation = () => (
   </svg>
 );
 
-// --- NEW, AUTHENTIC Candi Bentar (Balinese Gate) Ornament ---
 const candiBentarOrnament = `
   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="#a5f3fc">
     <path d="M9.79 22.42 1.5 18.25V3.75l8.29 4.17v14.5ZM22.5 18.25 14.21 22.42V8l8.29-4.25v14.5Z"/>
@@ -80,12 +97,13 @@ const encodedSvg = `url("data:image/svg+xml,${encodeURIComponent(
   candiBentarOrnament
 )}")`;
 
-// Define the type for a menu item
+// Update interface untuk support badge
 interface Menu {
   label: string;
   path: string;
   icon: ReactNode;
   subMenus?: SubMenu[];
+  badge?: number;
 }
 
 interface SubMenu {
@@ -98,6 +116,20 @@ const Sidebar = () => {
   const location = useLocation();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
+  // State untuk simulasi data notifikasi dari API
+  const [taskCount, setTaskCount] = useState(0);
+  const [validationCount, setValidationCount] = useState(0);
+
+  useEffect(() => {
+    // Simulasi fetch data notifikasi
+    const timer = setTimeout(() => {
+      setTaskCount(7);
+      setValidationCount(12);
+    }, 1000); // Delay 1 detik
+
+    return () => clearTimeout(timer); // Cleanup
+  }, []);
+
   const menus: Menu[] = [
     { label: "Dashboard", path: "/dashboard", icon: <IconDashboard /> },
     {
@@ -109,8 +141,23 @@ const Sidebar = () => {
         { label: "Tambah User", path: "/users/add" },
       ],
     },
-    { label: "Manajemen Tugas", path: "/tasks", icon: <IconTasks /> },
-    { label: "Validasi Input", path: "/validation", icon: <IconValidation /> },
+    {
+      label: "Manajemen Pelanggan",
+      path: "/clients",
+      icon: <IconClients />,
+    },
+    {
+      label: "Manajemen Tugas",
+      path: "/tasks",
+      icon: <IconTasks />,
+      badge: taskCount, // data dari state
+    },
+    {
+      label: "Validasi Input",
+      path: "/validation",
+      icon: <IconValidation />,
+      badge: validationCount, // data dari state
+    },
   ];
 
   const handleMenuClick = (menuLabel: string) => {
@@ -124,7 +171,7 @@ const Sidebar = () => {
         backgroundImage: encodedSvg,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "bottom 1rem right 1rem",
-        backgroundSize: "110px", // Adjusted size for the new ornament
+        backgroundSize: "110px",
       }}
     >
       <div className="flex flex-col h-full">
@@ -163,25 +210,33 @@ const Sidebar = () => {
                 >
                   <span className="flex items-center">
                     <span className="w-5 h-5 mr-3">{menu.icon}</span>
-                    {menu.label}
+                    <span>{menu.label}</span>
                   </span>
-                  {menu.subMenus && (
-                    <svg
-                      className={`w-4 h-4 transition-transform ${
-                        openMenu === menu.label ? "rotate-90" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 5l7 7-7 7"
-                      ></path>
-                    </svg>
-                  )}
+                  <div className="flex items-center">
+                    {/* Logic untuk render Badge */}
+                    {menu.badge && menu.badge > 0 && (
+                      <span className="bg-sky-500 text-white text-xs font-bold mr-2 px-2 py-0.5 rounded-full">
+                        {menu.badge}
+                      </span>
+                    )}
+                    {menu.subMenus && (
+                      <svg
+                        className={`w-4 h-4 transition-transform ${
+                          openMenu === menu.label ? "rotate-90" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 5l7 7-7 7"
+                        ></path>
+                      </svg>
+                    )}
+                  </div>
                 </button>
 
                 {menu.subMenus && openMenu === menu.label && (
@@ -212,7 +267,7 @@ const Sidebar = () => {
         <div className="p-4 border-t border-sky-200 mt-auto">
           <button
             onClick={() => {
-              localStorage.removeItem("token");
+              localStorage.clear();
               navigate("/login");
             }}
             className="w-full bg-rose-400 hover:bg-rose-500 text-white px-4 py-2 rounded-lg transition"

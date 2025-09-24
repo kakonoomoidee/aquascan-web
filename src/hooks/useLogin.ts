@@ -1,6 +1,8 @@
 // src/hooks/useLogin.ts
 import { useState } from "react";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -11,7 +13,7 @@ export const useLogin = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/login`,
+        `${API_BASE}/login`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
