@@ -30,7 +30,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${API_BASE}/admin/regisuser`,
+        `${API_BASE}/admin/users/add`,
         {
           method: "POST",
           headers: {
@@ -56,7 +56,7 @@ export function useUser() {
     setError(null);
     try {
       const res = await fetch(
-        `${API_BASE}/admin/users/`,
+        `${API_BASE}/admin/users/all`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

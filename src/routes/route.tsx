@@ -1,4 +1,3 @@
-//src/routes/route.tsx
 import {
   BrowserRouter as Router,
   Routes,
@@ -12,32 +11,67 @@ import ListUserClient from "@src/pages/users/listUser/listUserClient";
 import TaskClient from "@src/pages/taskPage/taskClient";
 import ValidateClient from "@src/pages/validatePage/validateClient";
 import CustomerClient from "@src/pages/customerPage/customerClient";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        {/* Default redirect ke login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-
-        {/* Login */}
         <Route path="/login" element={<LoginClient />} />
 
-        {/* Dashboard */}
-        <Route path="/dashboard" element={<DashboardClient />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute adminOnly>
+              <DashboardClient />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* User */}
-        <Route path="/users/add" element={<AddUserClient />} />
-        <Route path="/users/list" element={<ListUserClient />} />
+        <Route
+          path="/users/add"
+          element={
+            <ProtectedRoute adminOnly>
+              <AddUserClient />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/list"
+          element={
+            <ProtectedRoute adminOnly>
+              <ListUserClient />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Client */}
-        <Route path="/clients" element={<CustomerClient />} />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute adminOnly>
+              <CustomerClient />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Tasks */}
-        <Route path="/tasks" element={<TaskClient />} />
+        <Route
+          path="/tasks"
+          element={
+            <ProtectedRoute adminOnly>
+              <TaskClient />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Validation */}
-        <Route path="/validation" element={<ValidateClient />} />
+        <Route
+          path="/validation"
+          element={
+            <ProtectedRoute adminOnly>
+              <ValidateClient />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

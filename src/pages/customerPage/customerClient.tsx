@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { useCustomer, type Customer } from "@src/hooks/useCostomer";
+import { useCustomer } from "@src/hooks/useCostomer";
 import Sidebar from "@src/components/sidebar";
 
 // --- Helper Component untuk Skeleton Loading ---
@@ -174,8 +174,10 @@ const CustomerClient: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-slate-100">
-      <Sidebar />
-      <main className="flex-1 p-8">
+      <div className="fixed top-0 left-0 h-screen w-64 bg-white shadow">
+        <Sidebar />
+      </div>
+      <main className="flex-1 p-8 ml-64">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-slate-800">

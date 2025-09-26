@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLogin } from "@src/hooks/useLogin";
-import { useAuth } from "@src/hooks/useAuth";
 import loginImage from "@src/assets/images/login-img.webp";
+import Swal from "sweetalert2";
+import { getUserFromToken } from "@src/utils/jwt_decode"; // Asumsi path ini benar
 
 const LoginClient = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isAdmin } = useAuth();
+  const [showPassword, setShowPassword] = useState(false); // State untuk toggle password
   const { login, loading, error } = useLogin();
   const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "Login - AquaScan Admin";
   }, []);
@@ -19,17 +21,26 @@ const LoginClient = () => {
     const token = await login(email, password);
     if (!token) return;
 
-    setTimeout(() => {
-      if (isAdmin) {
-        navigate("/dashboard");
-      } else {
-        alert("Anda bukan admin, akses ditolak");
-        console.log(isAdmin);
-      }
-    }, 300);
+    // Cek role setelah dapat token
+    const userPayload = getUserFromToken();
+    if (userPayload && userPayload.role !== "admin") {
+      // Jika bukan admin, tampilkan alert dan jangan navigasi
+      Swal.fire({
+        title: "Akses Ditolak!",
+        text: "Hanya admin yang dapat masuk ke panel ini.",
+        icon: "error",
+        confirmButtonColor: "#3b82f6", // blue-500
+      });
+      // Hapus token yang salah karena user tidak berhak
+      localStorage.removeItem("token");
+      return; // Hentikan eksekusi
+    }
+
+    // Jika admin, baru navigasi ke dashboard
+    navigate("/dashboard");
   };
 
-  // icon and image
+  // --- Icon Components ---
   const WaterDropIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -81,19 +92,53 @@ const LoginClient = () => {
     </svg>
   );
 
+  // Icon baru untuk show/hide password
+  const EyeIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  );
+
+  const EyeSlashIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+      <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+      <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+      <line x1="2" x2="22" y1="2" y2="22"></line>
+    </svg>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans flex items-center justify-center p-4">
       <div className="flex w-full max-w-6xl min-h-[700px] bg-white shadow-2xl rounded-2xl overflow-hidden">
         {/* Kolom Kiri: Visual Bali */}
         <div className="hidden md:block w-1/2 relative">
-          {/* Image Layer */}
           <img
             src={loginImage}
             alt="Bali Water System"
             className="absolute inset-0 w-full h-full object-cover"
           />
-
-          {/* Overlay + Text */}
           <div className="absolute inset-0 bg-black/60 flex flex-col justify-end p-10 text-white">
             <h1 className="text-4xl font-bold leading-tight mb-4">
               Tirta Amerta Bhuwana
@@ -166,13 +211,21 @@ const LoginClient = () => {
                   </div>
                   <input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                    className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   />
+                  {/* Tombol Toggle Password */}
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? <EyeSlashIcon /> : <EyeIcon />}
+                  </button>
                 </div>
               </div>
 
