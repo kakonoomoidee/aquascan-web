@@ -1,3 +1,4 @@
+// src/routes/AppRoutes.tsx
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,18 +11,23 @@ import AddUserClient from "@src/pages/users/addUser/addUserClient";
 import ListUserClient from "@src/pages/users/listUser/listUserClient";
 import TaskClient from "@src/pages/taskPage/taskClient";
 import ValidateClient from "@src/pages/validatePage/validateClient";
-import CustomerClient from "@src/pages/customerPage/customerClient";
+import CustomerClient from "@src/pages/customers/listCustomerPage/customerClient";
+import DetailCustomerClient from "@src/pages/customers/detailCustomerPage/detailCustomerClient";
 import ProtectedRoute from "./ProtectedRoute";
+import { ROUTES } from "./routes";
 
 export default function AppRoutes() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginClient />} />
+        <Route
+          path={ROUTES.root}
+          element={<Navigate to={ROUTES.login} replace />}
+        />
+        <Route path={ROUTES.login} element={<LoginClient />} />
 
         <Route
-          path="/dashboard"
+          path={ROUTES.dashboard}
           element={
             <ProtectedRoute adminOnly>
               <DashboardClient />
@@ -30,15 +36,16 @@ export default function AppRoutes() {
         />
 
         <Route
-          path="/users/add"
+          path={ROUTES.users.add}
           element={
             <ProtectedRoute adminOnly>
               <AddUserClient />
             </ProtectedRoute>
           }
         />
+
         <Route
-          path="/users/list"
+          path={ROUTES.users.list}
           element={
             <ProtectedRoute adminOnly>
               <ListUserClient />
@@ -47,7 +54,7 @@ export default function AppRoutes() {
         />
 
         <Route
-          path="/clients"
+          path={ROUTES.clients.list}
           element={
             <ProtectedRoute adminOnly>
               <CustomerClient />
@@ -56,7 +63,16 @@ export default function AppRoutes() {
         />
 
         <Route
-          path="/tasks"
+          path={ROUTES.clients.detailPath}
+          element={
+            <ProtectedRoute adminOnly>
+              <DetailCustomerClient />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.tasks}
           element={
             <ProtectedRoute adminOnly>
               <TaskClient />
@@ -65,7 +81,7 @@ export default function AppRoutes() {
         />
 
         <Route
-          path="/validation"
+          path={ROUTES.validation}
           element={
             <ProtectedRoute adminOnly>
               <ValidateClient />

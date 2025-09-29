@@ -10,6 +10,12 @@ export interface Customer {
   alamat: string;
   long: string;
   lat: string;
+  bulan_rek: string;
+  bulan: string;
+  tgl_baca: string;
+  idtarip: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // 1. Tambahin interface buat data pagination
@@ -91,7 +97,8 @@ export function useCustomer(): UseCustomerResult {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      return res.data;
+
+      return res.data.data;
     } catch (err: any) {
       setError(err.response?.data?.error || "Gagal fetch detail");
       return null;
@@ -99,6 +106,7 @@ export function useCustomer(): UseCustomerResult {
       setLoading(false);
     }
   };
+
   // 5. Tambahin pagination di return value
   return {
     customers,
