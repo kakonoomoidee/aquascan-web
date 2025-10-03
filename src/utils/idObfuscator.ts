@@ -1,4 +1,4 @@
-// Fungsi untuk mengubah ID menjadi string Base64
+// file: src/utils/idObfuscator.ts
 export const encodeId = (id: string | number): string => {
   try {
     return btoa(String(id));
@@ -8,7 +8,6 @@ export const encodeId = (id: string | number): string => {
   }
 };
 
-// Fungsi untuk mengubah string Base64 kembali menjadi ID
 export const decodeId = (encodedId: string): string => {
   try {
     return atob(encodedId);

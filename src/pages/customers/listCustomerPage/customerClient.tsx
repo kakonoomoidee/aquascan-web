@@ -1,10 +1,11 @@
-// file: src/pages/customers/listCustomerPage/customerClient.tsx
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useCustomer } from "@src/hooks/useCustomer";
 import Sidebar from "@src/components/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useCustomerContext } from "@src/context/CustomerContext";
 import { ROUTES } from "@src/routes/routes";
+import useDebounce from "@src/hooks/useDebounce";
+import Pagination from "@src/components/pagination";
 
 // --- Helper Component untuk Skeleton Loading ---
 const SkeletonRow = () => (
@@ -30,148 +31,17 @@ const SkeletonRow = () => (
   </tr>
 );
 
-// --- Hook simple untuk Debounce ---
-const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-  return debouncedValue;
-};
-
-// --- Hook untuk Pagination ---
-const DOTS = "...";
-const usePagination = ({
-  totalPages,
-  siblingCount = 1,
-  currentPage,
-}: {
-  totalPages: number;
-  siblingCount?: number;
-  currentPage: number;
-}) => {
-  const paginationRange = useMemo(() => {
-    const totalPageNumbers = siblingCount + 5;
-    if (totalPageNumbers >= totalPages) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
-    const shouldShowLeftDots = leftSiblingIndex > 2;
-    const shouldShowRightDots = rightSiblingIndex < totalPages - 2;
-    const firstPageIndex = 1;
-    const lastPageIndex = totalPages;
-    if (!shouldShowLeftDots && shouldShowRightDots) {
-      let leftItemCount = 3 + 2 * siblingCount;
-      let leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
-      return [...leftRange, DOTS, totalPages];
-    }
-    if (shouldShowLeftDots && !shouldShowRightDots) {
-      let rightItemCount = 3 + 2 * siblingCount;
-      let rightRange = Array.from(
-        { length: rightItemCount },
-        (_, i) => totalPages - rightItemCount + i + 1
-      );
-      return [firstPageIndex, DOTS, ...rightRange];
-    }
-    if (shouldShowLeftDots && shouldShowRightDots) {
-      let middleRange = Array.from(
-        { length: rightSiblingIndex - leftSiblingIndex + 1 },
-        (_, i) => leftSiblingIndex + i
-      );
-      return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
-    }
-    return [];
-  }, [totalPages, siblingCount, currentPage]);
-  return paginationRange;
-};
-
-// --- Komponen Pagination ---
-const Pagination = ({
-  onPageChange,
-  totalPages,
-  currentPage,
-}: {
-  onPageChange: (page: number) => void;
-  totalPages: number;
-  currentPage: number;
-}) => {
-  const paginationRange = usePagination({ currentPage, totalPages });
-  if (currentPage === 0 || paginationRange.length < 2) return null;
-  const onNext = () => onPageChange(currentPage + 1);
-  const onPrevious = () => onPageChange(currentPage - 1);
-  let lastPage = paginationRange[paginationRange.length - 1];
-  return (
-    <nav aria-label="Page navigation">
-      <ul className="inline-flex items-center -space-x-px">
-        <li>
-          <button
-            onClick={onPrevious}
-            disabled={currentPage === 1}
-            className="px-3 py-2 ml-0 leading-tight text-slate-500 bg-white border border-slate-300 rounded-l-lg hover:bg-slate-100 disabled:opacity-50"
-          >
-            Previous
-          </button>
-        </li>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS)
-            return (
-              <li
-                key={index}
-                className="px-3 py-2 leading-tight text-slate-500 bg-white border border-slate-300"
-              >
-                ...
-              </li>
-            );
-          return (
-            <li key={index}>
-              <button
-                onClick={() => onPageChange(pageNumber as number)}
-                className={`px-3 py-2 leading-tight border ${
-                  currentPage === pageNumber
-                    ? "bg-sky-100 text-sky-600 border-sky-300"
-                    : "text-slate-500 bg-white border-slate-300 hover:bg-slate-100"
-                }`}
-              >
-                {pageNumber}
-              </button>
-            </li>
-          );
-        })}
-        <li>
-          <button
-            onClick={onNext}
-            disabled={currentPage === lastPage}
-            className="px-3 py-2 leading-tight text-slate-500 bg-white border border-slate-300 rounded-r-lg hover:bg-slate-100 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </li>
-      </ul>
-    </nav>
-  );
-};
-
 // --- Komponen Utama Halaman ---
 const CustomerClient: React.FC = () => {
   const { customers, pagination, loading, error, fetchCustomers } =
     useCustomer();
   const navigate = useNavigate();
-
-  // Ambil state dan setter dari Context
   const { page, setPage, limit, setLimit, searchTerm, setSearchTerm } =
     useCustomerContext();
-
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     document.title = "Daftar Pelanggan - AquaScan Admin";
-    // fetchCustomers sekarang pakai state dari context yang sudah di-debounce
     fetchCustomers(page, limit, debouncedSearchTerm);
   }, [page, limit, debouncedSearchTerm, fetchCustomers]);
 
