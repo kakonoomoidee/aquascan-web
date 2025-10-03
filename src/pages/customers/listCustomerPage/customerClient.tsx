@@ -1,11 +1,12 @@
-// File: src/pages/customers/listCustomerPage/customerClient.tsx
-import React, { useEffect, useState, useMemo, useRef } from "react";
+// file: src/pages/customers/listCustomerPage/customerClient.tsx
+import React, { useEffect, useState, useMemo } from "react";
 import { useCustomer } from "@src/hooks/useCustomer";
 import Sidebar from "@src/components/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useCustomerContext } from "@src/context/CustomerContext";
+import { ROUTES } from "@src/routes/routes";
 
-// --- Helper Component untuk Skeleton Loading (Tidak Berubah) ---
+// --- Helper Component untuk Skeleton Loading ---
 const SkeletonRow = () => (
   <tr className="animate-pulse">
     <td className="px-6 py-4">
@@ -29,7 +30,7 @@ const SkeletonRow = () => (
   </tr>
 );
 
-// --- Hook simple untuk Debounce (Kita pakai lagi) ---
+// --- Hook simple untuk Debounce ---
 const useDebounce = (value: string, delay: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
@@ -43,7 +44,7 @@ const useDebounce = (value: string, delay: number) => {
   return debouncedValue;
 };
 
-// --- Hook untuk Pagination (Tidak Berubah) ---
+// --- Hook untuk Pagination ---
 const DOTS = "...";
 const usePagination = ({
   totalPages,
@@ -90,7 +91,7 @@ const usePagination = ({
   return paginationRange;
 };
 
-// --- Komponen Pagination (Tidak Berubah) ---
+// --- Komponen Pagination ---
 const Pagination = ({
   onPageChange,
   totalPages,
@@ -160,30 +161,19 @@ const Pagination = ({
 const CustomerClient: React.FC = () => {
   const { customers, pagination, loading, error, fetchCustomers } =
     useCustomer();
+  const navigate = useNavigate();
 
-  // gunakan context untuk page/limit/searchTerm
+  // Ambil state dan setter dari Context
   const { page, setPage, limit, setLimit, searchTerm, setSearchTerm } =
     useCustomerContext();
 
-  const debouncedSearchTerm = useDebounce(searchTerm, 500); // <-- Logic Debounce kembali
-  const navigate = useNavigate();
-
-  // ref untuk skip initial setPage(1) on mount
-  const didMountRef = useRef(false);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
     document.title = "Daftar Pelanggan - AquaScan Admin";
+    // fetchCustomers sekarang pakai state dari context yang sudah di-debounce
     fetchCustomers(page, limit, debouncedSearchTerm);
   }, [page, limit, debouncedSearchTerm, fetchCustomers]);
-
-  // hanya reset ke page 1 ketika search/limit berubah setelah mount
-  useEffect(() => {
-    if (didMountRef.current) {
-      setPage(1);
-    } else {
-      didMountRef.current = true;
-    }
-  }, [debouncedSearchTerm, limit, setPage]);
 
   return (
     <div className="flex min-h-screen bg-slate-100">
@@ -202,7 +192,6 @@ const CustomerClient: React.FC = () => {
           </div>
         </div>
 
-        {/* Search and Filter Bar, tanpa <form> dan tombol */}
         <div className="mb-4 p-4 bg-white rounded-xl shadow-lg flex justify-between items-center">
           <div className="relative w-full max-w-sm">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -233,9 +222,7 @@ const CustomerClient: React.FC = () => {
             <select
               className="border border-slate-200 rounded-lg px-2 py-2 text-sm bg-slate-50 focus:ring-2 focus:ring-sky-500 outline-none"
               value={limit}
-              onChange={(e) => {
-                setLimit(Number(e.target.value));
-              }}
+              onChange={(e) => setLimit(Number(e.target.value))}
             >
               <option value={10}>10</option>
               <option value={25}>25</option>
@@ -280,7 +267,9 @@ const CustomerClient: React.FC = () => {
                     <tr
                       key={c.id}
                       className="hover:bg-slate-50 cursor-pointer"
-                      onClick={() => navigate(`/clients/${c.nosbg}`)}
+                      onClick={() =>
+                        navigate(ROUTES.clients.detail(String(c.nosbg)))
+                      }
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-slate-600">
                         {c.id}

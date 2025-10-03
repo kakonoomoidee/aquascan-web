@@ -1,6 +1,7 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser, type User } from "@src/hooks/useUser";
+import { useUser } from "@src/hooks/useUser";
+import { type User } from "@src/models/user";
 import Sidebar from "@src/components/sidebar";
 import Swal from "sweetalert2";
 
@@ -41,7 +42,7 @@ const RoleBadge = ({ role }: { role: string }) => {
 };
 
 const ListUserClient = () => {
-  const { getAllUsers, deleteUser, loading, error } = useUser();
+  const { getAllUsers, deleteUser, loading } = useUser();
   const [users, setUsers] = useState<User[]>([]);
   const [openActionMenu, setOpenActionMenu] = useState<number | null>(null);
   const navigate = useNavigate();

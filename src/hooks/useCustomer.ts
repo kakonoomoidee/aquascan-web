@@ -1,34 +1,14 @@
+// file: src/hooks/useCustomer.ts
 import { useState, useCallback } from "react";
 import axios from "axios";
+import { type Customer } from "@src/models/customer";
+import { type PaginationInfo } from "@src/models/pagination";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-export interface Customer {
-  id: number;
-  nosbg: number;
-  nama: string;
-  alamat: string;
-  long: string;
-  lat: string;
-  bulan_rek: string;
-  bulan: string;
-  tgl_baca: string;
-  idtarip: string;
-  created_at: string;
-  updated_at: string;
-}
-
-// 1. Tambahin interface buat data pagination
-interface PaginationInfo {
-  totalPages: number;
-  totalItems: number;
-  currentPage: number;
-}
-
-// 2. Update return type dari hook
 interface UseCustomerResult {
   customers: Customer[];
-  pagination: PaginationInfo | null; // <-- DITAMBAHKAN
+  pagination: PaginationInfo | null;
   loading: boolean;
   error: string | null;
   fetchCustomers: (
@@ -41,7 +21,7 @@ interface UseCustomerResult {
 
 export function useCustomer(): UseCustomerResult {
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [pagination, setPagination] = useState<PaginationInfo | null>(null); // <-- 3. State baru buat pagination
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,8 +47,6 @@ export function useCustomer(): UseCustomerResult {
           }
         );
 
-        // 4. Ambil data customer DAN pagination dari response
-        // (Asumsi API response-nya: { data: { results: [], totalPages: 10, ... } })
         setCustomers(res.data.data.results || []);
         setPagination({
           totalPages: res.data.data.totalPages || 1,
@@ -77,7 +55,7 @@ export function useCustomer(): UseCustomerResult {
         });
       } catch (err: any) {
         setError(err.response?.data?.error || "Gagal fetch data");
-        setCustomers([]); // Kosongkan data jika error
+        setCustomers([]);
         setPagination(null);
       } finally {
         setLoading(false);
@@ -86,13 +64,14 @@ export function useCustomer(): UseCustomerResult {
     []
   );
 
+  //! we need to remove this function later
   const fetchCustomerDetail = async (
     nosbg: string
   ): Promise<Customer | null> => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get(`${API_BASE}/clients/${nosbg}`, {
+      const res = await axios.get(`${API_BASE}/admin/clients/${nosbg}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -107,7 +86,6 @@ export function useCustomer(): UseCustomerResult {
     }
   };
 
-  // 5. Tambahin pagination di return value
   return {
     customers,
     pagination,

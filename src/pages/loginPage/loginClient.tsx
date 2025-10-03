@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLogin } from "@src/hooks/useLogin";
 import loginImage from "@src/assets/images/login-img.webp";
 import Swal from "sweetalert2";
-import { getUserFromToken } from "@src/utils/jwt_decode"; // Asumsi path ini benar
+import { getUserFromToken } from "@src/utils/jwtDecode"; // Asumsi path ini benar
 
 const LoginClient = () => {
   const [email, setEmail] = useState("");

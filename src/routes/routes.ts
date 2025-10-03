@@ -1,4 +1,6 @@
 // src/routes/routes.ts
+import { encodeId } from "@src/utils/idObfuscator";
+
 export const ROUTES = {
   root: "/",
   login: "/login",
@@ -9,8 +11,9 @@ export const ROUTES = {
   },
   clients: {
     list: "/clients",
-    detail: (nosbg: string) => `/clients/${nosbg}`,
-    detailPath: "/clients/:nosbg",
+
+    detail: (nosbg: string) => `/clients/${encodeId(nosbg)}`,
+    detailPath: "/clients/:encodedNosbg",
   },
   tasks: "/tasks",
   validation: "/validation",

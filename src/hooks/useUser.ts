@@ -1,23 +1,8 @@
 // src/hooks/useUser.ts
 import { useState } from "react";
+import { type User, type UserPayload } from "@src/models/user";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
-
-export interface UserPayload {
-  full_name: string;
-  email: string;
-  password?: string;
-  role: string;
-}
-
-export interface User {
-  id: number;
-  full_name: string;
-  email: string;
-  role: string;
-  created_at: string;
-  updated_at: string;
-}
 
 export function useUser() {
   const [loading, setLoading] = useState(false);
@@ -29,17 +14,14 @@ export function useUser() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
-        `${API_BASE}/admin/users/add`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${API_BASE}/admin/users/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Gagal menambahkan user");
       return data;
@@ -55,12 +37,9 @@ export function useUser() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
-        `${API_BASE}/admin/users/all`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${API_BASE}/admin/users/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Gagal mengambil user");
 
@@ -77,17 +56,14 @@ export function useUser() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
-        `${API_BASE}/admin/users/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(`${API_BASE}/admin/users/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Gagal update user");
       return data;
@@ -103,13 +79,10 @@ export function useUser() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(
-        `${API_BASE}/admin/users/${id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await fetch(`${API_BASE}/admin/users/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Gagal hapus user");
       return data;
