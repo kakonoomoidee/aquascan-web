@@ -1,5 +1,5 @@
 import React from "react";
-import usePagination, { DOTS } from "@src/hooks/usePagination";
+import { DOTS, usePagination } from "@src/hooks/index";
 
 interface PaginationProps {
   onPageChange: (page: number) => void;

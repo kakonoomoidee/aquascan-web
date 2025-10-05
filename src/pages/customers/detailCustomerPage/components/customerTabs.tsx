@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { type Customer } from "@src/models/customer";
-import InfoItem from "@src/components/infoItem";
+import { type Customer } from "@src/models/index";
+import { InfoItem } from "@src/components/index";
 import { formatCurrency, formatDate } from "@src/utils/index";
 
 interface CustomerTabsProps {
