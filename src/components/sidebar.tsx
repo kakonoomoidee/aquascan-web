@@ -42,11 +42,10 @@ const Sidebar = () => {
   const [validationCount, setValidationCount] = useState(0);
 
   useEffect(() => {
-    // Simulasi fetch data notifikasi
     const timer = setTimeout(() => {
       setTaskCount(7);
       setValidationCount(12);
-    }, 1000); // Delay 1 detik
+    }, 1000);
 
     return () => clearTimeout(timer); // Cleanup
   }, []);
