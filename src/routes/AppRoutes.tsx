@@ -8,7 +8,7 @@ import {
 import LoginClient from "@src/pages/loginPage/loginClient";
 import DashboardClient from "@src/pages/dashboardPage/dashboardClient";
 import AddUserClient from "@src/pages/users/addUser/addUserClient";
-import ListUserClient from "@src/pages/users/listUser/listUserClient";
+import ListUserClient from "@src/pages/users/listUserPage/listUserClient";
 import TaskClient from "@src/pages/taskPage/taskClient";
 import ValidateClient from "@src/pages/validatePage/validateClient";
 import CustomerClient from "@src/pages/customers/listCustomerPage/customerClient";

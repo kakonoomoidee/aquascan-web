@@ -17,3 +17,5 @@ export { default as IconMail } from "./iconMail";
 export { default as IconEye } from "./iconEye";
 export { default as IconEyeSlash } from "./iconEyeSlash";
 export { default as IconLock } from "./iconLock";
+export { default as IconPlus } from "./iconPlus";
+export { default as IconKebabMenu } from "./iconKebabMenu";
