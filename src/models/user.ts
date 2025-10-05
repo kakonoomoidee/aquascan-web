@@ -1,3 +1,4 @@
+// file: src/models/user.ts
 export interface UserPayload {
   full_name: string;
   email: string;

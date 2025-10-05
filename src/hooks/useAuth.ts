@@ -1,12 +1,12 @@
 // src/hooks/useAuth.ts
 import { useState, useEffect } from "react";
 import { getUserFromToken } from "@src/utils/jwtDecode";
-import { type User } from "@src/models/auth";
+import { type AuthUser } from "@src/models/auth";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export const useAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

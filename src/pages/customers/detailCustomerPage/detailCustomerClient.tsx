@@ -3,11 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import { useCustomer } from "@src/hooks/useCustomer";
 import { type Customer } from "@src/models/customer";
 import Sidebar from "@src/components/sidebar";
-import { decodeId } from "@src/utils/idObfuscator";
-import { IconEdit } from "@src/components/icons";
+import { decodeId } from "@src/utils/index";
+import { IconEdit } from "@src/components/icons/index";
+import InfoItem from "@src/components/infoItem";
 import DetailSkeleton from "./components/detailSkeleton";
 import CustomerTabs from "./components/customerTabs";
-import InfoItem from "@src/components/infoItem";
 
 const DetailCustomerClient: React.FC = () => {
   const { encodedNosbg } = useParams<{ encodedNosbg: string }>();
