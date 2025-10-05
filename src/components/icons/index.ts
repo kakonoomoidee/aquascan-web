@@ -9,3 +9,5 @@ export { default as IconUsers } from "./iconUsers";
 export { default as IconValidation } from "./iconValidation";
 export { default as IconSearch } from "./iconSearch";
 export { default as IconProfile } from "./iconProfile";
+export { default as IconTask } from "./iconTask";
+export { default as IconPhoto } from "./iconPhoto";
