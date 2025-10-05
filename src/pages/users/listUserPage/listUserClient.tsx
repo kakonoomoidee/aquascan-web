@@ -3,7 +3,6 @@ import { useUser } from "@src/hooks/index";
 import { type User } from "@src/models/index";
 import { Sidebar } from "@src/components/index";
 import Swal from "sweetalert2";
-
 import { UserListPageHeader, UserTable } from "./components/index";
 
 const ListUserClient = () => {
@@ -39,7 +38,7 @@ const ListUserClient = () => {
         try {
           await deleteUser(id);
           Swal.fire("Dihapus!", "User berhasil dihapus.", "success");
-          fetchUsers(); // Re-fetch users after deletion
+          fetchUsers();
         } catch (err) {
           Swal.fire(
             "Gagal!",

@@ -5,3 +5,4 @@ export { default as InfoItem } from "./infoItem";
 export { default as Pagination } from "./pagination";
 export { RoleBadge } from "./roleBadge";
 export { DropdownMenu } from "./dropdownMenu";
+export { CustomSelect } from "./customSelect";
