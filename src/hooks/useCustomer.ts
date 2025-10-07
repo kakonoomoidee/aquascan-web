@@ -64,7 +64,6 @@ export function useCustomer(): UseCustomerResult {
     []
   );
 
-  //! we need to remove this function later
   const fetchCustomerDetail = async (
     nosbg: string
   ): Promise<Customer | null> => {

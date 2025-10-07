@@ -7,6 +7,7 @@ import {
   IconTasks,
   IconValidation,
 } from "@src/components/icons/index";
+import { useValidationCount } from "@src/hooks/index";
 
 const candiBentarOrnament = `
   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="#a5f3fc">
@@ -38,16 +39,15 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   // State untuk simulasi data notifikasi dari API
+
   const [taskCount, setTaskCount] = useState(0);
-  const [validationCount, setValidationCount] = useState(0);
+  const { data: validationCount } = useValidationCount();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setTaskCount(7);
-      setValidationCount(12);
     }, 1000);
-
-    return () => clearTimeout(timer); // Cleanup
+    return () => clearTimeout(timer);
   }, []);
 
   const menus: Menu[] = [
@@ -76,7 +76,7 @@ const Sidebar = () => {
       label: "Validasi Input",
       path: "/validation",
       icon: <IconValidation />,
-      badge: validationCount, // data dari state
+      badge: validationCount ?? 0, // data dari state
     },
   ];
 
@@ -134,7 +134,7 @@ const Sidebar = () => {
                   </span>
                   <div className="flex items-center">
                     {/* Logic untuk render Badge */}
-                    {menu.badge && menu.badge > 0 && (
+                    {typeof menu.badge === "number" && (
                       <span className="bg-sky-500 text-white text-xs font-bold mr-2 px-2 py-0.5 rounded-full">
                         {menu.badge}
                       </span>

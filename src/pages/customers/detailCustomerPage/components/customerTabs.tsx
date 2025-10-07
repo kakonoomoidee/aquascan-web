@@ -1,3 +1,4 @@
+// file: src/pages/customers/detailCustomerPage/components/customerTabs.tsx
 import React, { useState } from "react";
 import { type Customer } from "@src/models/index";
 import { InfoItem } from "@src/components/index";
@@ -16,7 +17,10 @@ const TABS_CONFIG = [
 
 const CustomerTabs: React.FC<CustomerTabsProps> = ({ customer }) => {
   const [activeTab, setActiveTab] = useState("pelanggan");
-
+  console.log("CustomerTabs rendered");
+  console.log(
+    "customer meter: " + customer.nometer + ", customer idtarip: " + customer.idtarip
+  );
   return (
     <div className="lg:col-span-2 bg-white rounded-xl shadow-lg">
       <div className="border-b border-slate-200">
