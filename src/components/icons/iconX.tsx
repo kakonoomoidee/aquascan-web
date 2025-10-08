@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconCheck: React.FC<{ className?: string }> = ({ className }) => (
+const IconX: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="20"
@@ -13,7 +13,8 @@ const IconCheck: React.FC<{ className?: string }> = ({ className }) => (
     strokeLinejoin="round"
     className={className}
   >
-    <polyline points="20 6 9 17 4 12"></polyline>
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
   </svg>
 );
-export default IconCheck;
+export default IconX;

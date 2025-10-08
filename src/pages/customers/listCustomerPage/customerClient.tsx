@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { Sidebar } from "@src/components/index";
 import { useNavigate } from "react-router-dom";
-import { useCustomerContext } from "@src/context/CustomerContext";
 import { ROUTES } from "@src/routes/routes";
-import { useDebounce, useCustomer } from "@src/hooks/index";
+import { useDebounce, useCustomer, useUrlState } from "@src/hooks/index";
 import { Pagination } from "@src/components/index";
 import {
   CustomerPageHeader,
@@ -16,7 +15,7 @@ const CustomerClient: React.FC = () => {
     useCustomer();
   const navigate = useNavigate();
   const { page, setPage, limit, setLimit, searchTerm, setSearchTerm } =
-    useCustomerContext();
+    useUrlState({});
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {

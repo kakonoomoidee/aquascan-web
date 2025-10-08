@@ -21,3 +21,7 @@ export { default as IconRole } from "./iconRole";
 export { default as IconChevronUpDown } from "./iconChevronUpDown";
 export { default as IconCheck } from "./iconCheck";
 export { default as IconClients } from "./iconClients";
+export { default as IconManualReading } from "./iconManualReading";
+export { default as IconScan } from "./iconScan";
+export { default as IconClock } from "./iconClock";
+export { default as IconX } from "./iconX";
