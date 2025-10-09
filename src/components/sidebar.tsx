@@ -7,7 +7,7 @@ import {
   IconTasks,
   IconValidation,
 } from "@src/components/icons/index";
-import { useValidationCount } from "@src/hooks/index";
+import { useSubmittedUploads } from "@src/hooks/index";
 
 const candiBentarOrnament = `
   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="#a5f3fc">
@@ -41,7 +41,7 @@ const Sidebar = () => {
   // State untuk simulasi data notifikasi dari API
 
   const [taskCount, setTaskCount] = useState(0);
-  const { data: validationCount } = useValidationCount();
+  const { data: validationCount } = useSubmittedUploads();
 
   useEffect(() => {
     const timer = setTimeout(() => {

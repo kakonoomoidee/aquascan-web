@@ -1,17 +1,40 @@
 import { useEffect, useState } from "react";
-import Sidebar from "@src/components/sidebar";
-import { useAuth } from "@src/hooks/useAuth";
-import { StatCard, ActivityItem } from "./components/index";
-import { IconPhoto, IconUsers, IconTask } from "@src/components/icons/index";
+import { Sidebar } from "@src/components/index";
+import { useAuth } from "@src/hooks/index";
+import {
+  useSubmittedUploads,
+  useValidatedToday,
+  useActiveOfficers,
+  useTotalSubmissions,
+} from "@src/hooks/index";
+import {
+  IconPhoto,
+  IconUsers,
+  IconTask,
+  IconValidation,
+} from "@src/components/icons";
+
+// local components
+import { StatCard, ActivityItem } from "./components";
 
 const DashboardClient = () => {
-  const { user, loading } = useAuth();
-  const [photoCount, setPhotoCount] = useState<number>(0);
+  const { user, loading: authLoading } = useAuth();
+
+  const { data: submittedCount, isLoading: loadingSubmitted } =
+    useSubmittedUploads();
+  const { data: validatedToday, isLoading: loadingValidated } =
+    useValidatedToday();
+  const { data: activeOfficers, isLoading: loadingOfficers } =
+    useActiveOfficers();
+  const { data: totalSubmissions, isLoading: loadingTotal } =
+    useTotalSubmissions();
+
   const [currentDate, setCurrentDate] = useState<string>("");
+  const totalOfficer =
+    (activeOfficers?.admin_total ?? 0) + (activeOfficers?.officers_active ?? 0);
 
   useEffect(() => {
     document.title = "Dashboard - AquaScan Admin";
-
     setCurrentDate(
       new Date().toLocaleDateString("id-ID", {
         weekday: "long",
@@ -20,17 +43,14 @@ const DashboardClient = () => {
         year: "numeric",
       })
     );
-    // Fake data loading
-    const timer = setTimeout(() => setPhotoCount(124), 500);
-    return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
+  if (authLoading) {
     return (
       <div className="flex min-h-screen bg-slate-100">
         <Sidebar />
         <main className="flex-1 p-8 flex justify-center items-center">
-          <div className="text-slate-500">Loading data...</div>
+          <div className="text-slate-500">Loading user data...</div>
         </main>
       </div>
     );
@@ -40,7 +60,6 @@ const DashboardClient = () => {
     <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
       <main className="flex-1 p-8">
-        {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-slate-800">
@@ -50,31 +69,40 @@ const DashboardClient = () => {
           </div>
         </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Statistik utama */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
-            icon={<IconPhoto />}
-            title="Total Foto"
-            value={photoCount}
-            color="blue"
+            icon={<IconValidation className="w-7 h-7" />}
+            title="Validasi Tertunda"
+            value={submittedCount ?? 0}
+            color="purple"
+            loading={loadingSubmitted}
           />
           <StatCard
-            icon={<IconUsers />}
-            title="Manajemen User"
-            value="32"
-            color="green"
-          />
-          <StatCard
-            icon={<IconTask />}
-            title="Tugas Aktif"
-            value="7"
+            icon={<IconTask className="w-7 h-7" />}
+            title="Validasi Selesai (Hari Ini)"
+            value={validatedToday ?? 0}
             color="yellow"
+            loading={loadingValidated}
+          />
+          <StatCard
+            icon={<IconUsers className="w-7 h-7" />}
+            title="Total Petugas"
+            value={totalOfficer ?? 0}
+            color="green"
+            loading={loadingOfficers}
+          />
+          <StatCard
+            icon={<IconPhoto className="w-7 h-7" />}
+            title="Total Foto Tervalidasi"
+            value={totalSubmissions ?? 0}
+            color="blue"
+            loading={loadingTotal}
           />
         </div>
 
-        {/* Additional Widgets */}
+        {/* Aktivitas & Statistik Mingguan */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Recent Activity */}
           <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
             <h2 className="text-lg font-semibold text-slate-700 mb-4">
               Aktivitas Terbaru
@@ -97,8 +125,6 @@ const DashboardClient = () => {
               />
             </div>
           </div>
-
-          {/* Chart Placeholder */}
           <div className="lg:col-span-3 bg-white rounded-xl shadow-md p-6">
             <h2 className="text-lg font-semibold text-slate-700 mb-4">
               Statistik Mingguan

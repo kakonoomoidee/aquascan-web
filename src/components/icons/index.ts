@@ -1,6 +1,5 @@
 // file: src/components/icons/index.ts
 // export all components from a single file for easier imports
-// export iconsimport { icon } from '@src/components/icons/index';
 export { default as IconDashboard } from "./iconDashboard";
 export { default as IconEdit } from "./iconEdit";
 export { default as IconTasks } from "./iconTasks";
@@ -25,3 +24,4 @@ export { default as IconManualReading } from "./iconManualReading";
 export { default as IconScan } from "./iconScan";
 export { default as IconClock } from "./iconClock";
 export { default as IconX } from "./iconX";
+

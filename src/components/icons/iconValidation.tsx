@@ -1,6 +1,9 @@
-const IconValidation = () => (
+import React from "react";
+
+const IconValidation: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -10,8 +13,8 @@ const IconValidation = () => (
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
-    <path d="m9 12 2 2 4-4"></path>
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <polyline points="22 4 12 14.01 9 11.01" />
   </svg>
 );
 
