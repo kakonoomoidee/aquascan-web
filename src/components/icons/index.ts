@@ -24,4 +24,4 @@ export { default as IconManualReading } from "./iconManualReading";
 export { default as IconScan } from "./iconScan";
 export { default as IconClock } from "./iconClock";
 export { default as IconX } from "./iconX";
-
+export { default as IconOcr } from "./iconOcr";

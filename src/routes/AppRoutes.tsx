@@ -16,6 +16,8 @@ import DetailCustomerClient from "@src/pages/customers/detailCustomerPage/detail
 import ProtectedRoute from "./ProtectedRoute";
 import { ROUTES } from "./routes";
 import ValidationDetailClient from "@src/pages/validatePage/detailValidatePage/detailValidatePageClient";
+import SearchUser from "@src/pages/ocrTestPage/searchUser";
+import OcrClient from "@src/pages/ocrTestPage/ocr";
 
 export default function AppRoutes() {
   return (
@@ -92,6 +94,22 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute adminOnly>
               <ValidationDetailClient />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ocr-test" // Halaman Awal (Search)
+          element={
+            <ProtectedRoute adminOnly>
+              <SearchUser />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ocr-test/:nosbg" // Halaman Kedua (OCR)
+          element={
+            <ProtectedRoute adminOnly>
+              <OcrClient />
             </ProtectedRoute>
           }
         />

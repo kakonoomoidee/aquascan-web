@@ -11,5 +11,6 @@ export {
 export { useValidation } from "./useValidation";
 export { useUrlState } from "./useUrlState";
 export { useAuth } from "./useAuth";
+export { useOcr } from "./useOcr";
 export { default as useDebounce } from "./useDebounce";
 export { default as usePagination, DOTS } from "./usePagination";

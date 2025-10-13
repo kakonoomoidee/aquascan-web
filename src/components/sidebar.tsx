@@ -6,6 +6,7 @@ import {
   IconClients,
   IconTasks,
   IconValidation,
+  IconOcr,
 } from "@src/components/icons/index";
 import { useSubmittedUploads } from "@src/hooks/index";
 
@@ -77,6 +78,11 @@ const Sidebar = () => {
       path: "/validation",
       icon: <IconValidation />,
       badge: validationCount ?? 0, // data dari state
+    },
+    {
+      label: "Tes OCR Kamera",
+      path: "/ocr-test",
+      icon: <IconOcr className="w-5 h-5" />,
     },
   ];
 
