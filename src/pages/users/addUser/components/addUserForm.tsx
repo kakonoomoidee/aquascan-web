@@ -23,7 +23,7 @@ export const AddUserForm: React.FC<AddUserFormProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const roleOptions = [
-    { value: "staf", label: "Staf" },
+    { value: "staff", label: "Petugas Lapangan" },
     { value: "admin", label: "Admin" },
   ];
   const [selectedRole, setSelectedRole] = useState(roleOptions[0]);

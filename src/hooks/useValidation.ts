@@ -27,8 +27,8 @@ export function useValidation() {
       );
 
       // parsing data
-      setUploads(res.data.data.data || []);
-      const meta = res.data.data.meta;
+      setUploads(res.data.data || []);
+      const meta = res.data.meta;
       if (meta) {
         setPagination({
           totalPages: meta.total_pages || 1,
@@ -54,7 +54,7 @@ export function useValidation() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      return res.data.data.upload as Upload;
+      return res.data.upload as Upload;
     } catch (err: any) {
       setError(err.response?.data?.message || "Gagal memuat detail");
       return null;
